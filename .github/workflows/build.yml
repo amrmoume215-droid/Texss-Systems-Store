@@ -10,12 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -23,18 +17,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential ccache git libncurses5:i386 libstdc++6:i386 libz1:i386 \
-            zlib1g-dev libssl-dev libffi-dev openjdk-17-jdk unzip libltdl-dev
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
 
-      - name: Install Buildozer and Cython
+      - name: Install Buildozer
         run: |
           pip install --upgrade pip
-          pip install Cython==0.29.33 buildozer
+          pip install --user Cython==0.29.33 buildozer
 
       - name: Build with Buildozer
-        run: buildozer -v android debug
+        run: ~/.local/bin/buildozer -v android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
